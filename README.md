@@ -17,7 +17,7 @@ Việc quản lý chuỗi cửa hàng Cafe 24h gặp khó khăn lớn trong vi�
 ## 2. Giải Pháp (Solution)
 Xây dựng hệ thống giám sát tự động gồm:
 1.  **Camera Top-Down:** Soi vuông góc xuống quầy ra món.
-2.  **Core Algorithm:** Sử dụng OpenCV đo đường kính miệng ly (độ chính xác <2mm) để phân loại Size (S/M/L) tương ứng với giá tiền.
+2.  **Core Algorithm:** Sử dụng OpenCV đo đường kính miệng ly (độ chính xác <2mm) để phân loại Size (S/M/L,..) tương ứng với giá tiền dự tính sẽ có 15 loại ly khác nhau.
 3.  **POS Listener:** Bắt tín hiệu in bill từ máy thu ngân.
 4.  **Logic Engine:** Đối chiếu `[Ly thực tế]` vs `[Bill đã in]`. Nếu lệch -> **CẢNH BÁO**.
 
@@ -39,7 +39,7 @@ Xây dựng hệ thống giám sát tự động gồm:
     - [ ] Code module `Cup-Detector`: Dùng Hough Circle Transform bắt miệng ly.
     - [ ] Xử lý nhiễu: Lọc bỏ các vòng tròn giả, ổn định kết quả đo (Moving Average).
 - [ ] **Tuần 3: Phân loại & Dữ liệu mẫu**
-    - [ ] Đo đạc thực tế 3 mẫu ly (S, M, L) để set ngưỡng (Threshold).
+    - [ ] Đo đạc thực tế mẫu ly để set ngưỡng (Threshold).
     - [ ] Test độ chính xác với các loại nước khác nhau (đen, sữa, nước ép).
 - [ ] **Tuần 4: Đóng gói Core Service**
     - [ ] Viết API local trên RPi (FastAPI) trả về kết quả JSON realtime.
@@ -83,10 +83,10 @@ Xây dựng hệ thống giám sát tự động gồm:
 ## 🛠 Tech Stack
 
 ### Hardware (Edge)
-* **MCU:** Raspberry Pi 4 (4GB) hoặc Pi 5.
-* **Camera:** Module Camera góc rộng (Wide angle) hoặc Webcam Logitech C930e.
-* **Sensor:** Cảm biến tiệm cận (Optional - để trigger camera).
-* **Mount:** Khung nhôm định hình & Tấm lót cao su đen.
+* **MCU:** Raspberry Pi 5 + AI Kit.
+* **Camera:** Module Camera Raspberry và C906 AI Vision .
+* **Sensor:** nếu cần sẽ phát sinh tìm sensor.
+* **Mount:** Khung nhôm định hình & Tấm lót cao su đen,....
 
 ### Software
 * **Core AI:** Python 3.9+, OpenCV (Computer Vision).
