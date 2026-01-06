@@ -1,32 +1,115 @@
-# AI quản lí Cafe 24h
+# Smart Cafe AI Monitor (Hệ thống Giám sát & Chống thất thoát F&B)
 
-**Đặt Vấn đề:**
+![Status](https://img.shields.io/badge/Status-In%20Development-yellow)
+![Platform](https://img.shields.io/badge/Platform-Raspberry%20Pi%20%7C%20Web-blue)
+![Tech](https://img.shields.io/badge/Tech-Python%20%7C%20OpenCV%20%7C%20FastAPI%20%7C%20React-green)
 
-Việc kiểm tra và đối chiếu số liệu bán ra của các sản phẩm tại nhiều cửa hàng đối với 1 người chủ là một vấn đề lớn khi người chủ không thể lúc nào cũng có mặt 24/7 tại cửa tiệm và nếu giao cho nhân viên quản lí sẽ có thể xảy ra trường hợp thất thoáng chi phí khi nhân viên bán hàng không có hóa đơn.
+> **Mô tả:** Hệ thống AI biên (Edge AI) chạy trên Raspberry Pi giúp tự động đếm số lượng ly nước bán ra thông qua Camera, đo kích thước miệng ly để xác định giá tiền, và đối chiếu thời gian thực với dữ liệu từ máy POS/Bill để phát hiện gian lận hoặc sai sót.
 
-**Giải pháp:**
+---
 
-- sử dụng Camera AI có tích hợp chương trình xử lí ảnh hoạt động liên tục trong ca làm việc của nhân viên để kiểm tra quy trình làm việc và đối chiếu số liệu sản phẩm bán ra thực tế với hóa đơn đã nhập.
+## 1. Đặt Vấn Đề (Problem)
+Việc quản lý chuỗi cửa hàng Cafe 24h gặp khó khăn lớn trong việc kiểm soát doanh thu thực tế:
+- Chủ quán không thể có mặt 24/7.
+- Camera an ninh thông thường chỉ để "xem lại" khi sự việc đã rồi.
+- Nhân viên có thể cố tình không in bill để thu tiền riêng (thất thoát doanh thu).
 
-**Mục tiêu dự án:**
+## 2. Giải Pháp (Solution)
+Xây dựng hệ thống giám sát tự động gồm:
+1.  **Camera Top-Down:** Soi vuông góc xuống quầy ra món.
+2.  **Core Algorithm:** Sử dụng OpenCV đo đường kính miệng ly (độ chính xác <2mm) để phân loại Size (S/M/L) tương ứng với giá tiền.
+3.  **POS Listener:** Bắt tín hiệu in bill từ máy thu ngân.
+4.  **Logic Engine:** Đối chiếu `[Ly thực tế]` vs `[Bill đã in]`. Nếu lệch -> **CẢNH BÁO**.
 
-- [ ] Theo dõi và đếm số lượng sản phẩm bán ra ở cafe 24h
-- [ ] Đối chiếu giá trị thực tế so với doanh thu của máy thu ngân
-- [ ] Gửi cảnh báo về thiết bị chủ tiệm khi phát hiện trường hợp đáng ngờ
-- [ ] Phân tích loại nước khách thường dùng theo ngày tuần hoặc tháng để đưa ra chiến lượt nhập hàng tối ưu
+---
 
-**Các Vấn đề và yêu cầu bố trí để hệ thống hoạt động tốt nhất :**
+## 📅 3. Lộ Trình Phát Triển (Development Roadmap)
+**Thời gian dự kiến:** 3 Tháng (14/12/2025 - 14/03/2026)
 
-- [ ] Ứng dụng quản lí không thể nhận dạng chính xác 100% các loại nước đã làm ra , vì thế cần chọn ra các loại mẫu ly với kích thước miệng ly khác nhau cho từng mốc giá.
-- [ ] Khu vực và vị trí đặt ly nước để mang ra cho khách sẽ bằng hoặc rộng hơn vị trí hiện tại ở quán Cafe 24h khu vực gần đường tên lửa
-- [ ] Khu vực và vị trí đặt ly nước đã dùng xong phải khác với vị trí ra nước
-- [ ] ứng dụng quản lí bán hàng hiện tại phải cho phép hoặc cung cấp tài liệu cho nhà phát triển để lấy được dữ liệu ( nếu trường hợp không thể truy xuất được dữ liệu bắt buộc chúng ta phải phát triển phần mềm riêng để kết hợp với mô hình hiện tại )
+### Giai đoạn 1: Core Engine & Hardware Setup (Tháng 1)
+*Thời gian: 14/12/2025 - 14/01/2026*
+**Mục tiêu:** Camera nhận diện và đo được kích thước ly chính xác trên RPi.
 
-**Tài liệu tham khảo và mẫu ly tham khảo:**
+- [ ] **Tuần 1: Setup Môi trường & Phần cứng**
+    - [ ] Lắp ráp khung giá đỡ Camera (Rig) vuông góc 90 độ.
+    - [ ] Thi công thảm nền màu Đen Nhám (Matte Black) để khử nhiễu phản xạ.
+    - [ ] Cài đặt OS Raspberry Pi 64-bit, OpenCV, Python env.
+- [ ] **Tuần 2: Thuật toán Đo lường (Measurement)**
+    - [ ] Code module `Auto-Calibration`: Tự tính tỷ lệ Pixel/CM qua vật tham chiếu.
+    - [ ] Code module `Cup-Detector`: Dùng Hough Circle Transform bắt miệng ly.
+    - [ ] Xử lý nhiễu: Lọc bỏ các vòng tròn giả, ổn định kết quả đo (Moving Average).
+- [ ] **Tuần 3: Phân loại & Dữ liệu mẫu**
+    - [ ] Đo đạc thực tế 3 mẫu ly (S, M, L) để set ngưỡng (Threshold).
+    - [ ] Test độ chính xác với các loại nước khác nhau (đen, sữa, nước ép).
+- [ ] **Tuần 4: Đóng gói Core Service**
+    - [ ] Viết API local trên RPi (FastAPI) trả về kết quả JSON realtime.
 
-> c[`﻿`﻿lythuytinh.vn/collections/ly-cafe-da-cafe-capuchino](https://lythuytinh.vn/collections/ly-cafe-da-cafe-capuchino)
+### Giai đoạn 2: POS Integration & Logic (Tháng 2)
+*Thời gian: 15/01/2026 - 14/02/2026*
+**Mục tiêu:** Hệ thống biết "so sánh" và phát hiện lỗi.
 
-> https://lythuytinh.vn/
+- [ ] **Tuần 5: Kết nối máy POS**
+    - [ ] Nghiên cứu giao thức máy in (ESC/POS) hoặc API phần mềm bán hàng.
+    - [ ] Viết module `POS-Listener` để bắt dữ liệu Bill (Món, Size, Time).
+- [ ] **Tuần 6: Xây dựng Logic "Matching"**
+    - [ ] Code State Machine: `Idle` -> `Detected` -> `Waiting_Bill` -> `Valid/Violation`.
+    - [ ] Xử lý độ trễ: Cho phép in bill trễ X giây so với lúc ra nước.
+- [ ] **Tuần 7: Local Database & Storage**
+    - [ ] Thiết kế SQLite Schema: `Events`, `Violations`, `DailyStats`.
+    - [ ] Cơ chế lưu ảnh bằng chứng (Snapshot) khi phát hiện lỗi.
+- [ ] **Tuần 8: Cảnh báo tại chỗ (On-site Alert)**
+    - [ ] Tích hợp Loa/Đèn báo động vào GPIO của RPi.
+    - [ ] Test quy trình: Không bill -> Hú còi.
 
+### Giai đoạn 3: Cloud Dashboard & Deployment (Tháng 3)
+*Thời gian: 15/02/2026 - 14/03/2026*
+**Mục tiêu:** Chủ quán quản lý từ xa & Triển khai thực tế.
 
+- [ ] **Tuần 9: Cloud Backend (Sync)**
+    - [ ] Xây dựng Cloud DB (Firebase/Postgres).
+    - [ ] Viết Worker đồng bộ dữ liệu từ RPi lên Cloud (tối ưu băng thông).
+- [ ] **Tuần 10: Web Dashboard (Frontend)**
+    - [ ] Code giao diện Dashboard (ReactJS): Biểu đồ doanh thu, List vi phạm.
+    - [ ] Tính năng "Playback": Xem lại ảnh/clip lúc xảy ra vi phạm.
+- [ ] **Tuần 11: Cấu hình từ xa**
+    - [ ] Tính năng cập nhật kích thước ly (Config) từ Web xuống RPi.
+- [ ] **Tuần 12: Đóng gói & UAT**
+    - [ ] Thiết kế vỏ hộp in 3D bảo vệ RPi.
+    - [ ] Chạy thử nghiệm 24h liên tục tại quán.
+    - [ ] Fix bug & Viết tài liệu hướng dẫn sử dụng.
 
+---
+
+## 🛠 Tech Stack
+
+### Hardware (Edge)
+* **MCU:** Raspberry Pi 4 (4GB) hoặc Pi 5.
+* **Camera:** Module Camera góc rộng (Wide angle) hoặc Webcam Logitech C930e.
+* **Sensor:** Cảm biến tiệm cận (Optional - để trigger camera).
+* **Mount:** Khung nhôm định hình & Tấm lót cao su đen.
+
+### Software
+* **Core AI:** Python 3.9+, OpenCV (Computer Vision).
+* **Local Backend:** FastAPI, SQLite.
+* **Cloud/Web:** ReactJS (Frontend), Firebase/Supabase (DB & Auth).
+* **Deployment:** Docker (cho RPi), GitHub Actions.
+
+---
+
+## Yêu cầu Triển khai (Installation Requirements)
+
+Để thuật toán hoạt động chính xác >95%, điểm bán cần tuân thủ:
+1.  **Vị trí:** Camera lắp cố định, vuông góc 90 độ so với mặt bàn.
+2.  **Ánh sáng:** Đủ sáng, không bị lóa trực tiếp vào miệng ly (dùng đèn tản sáng).
+3.  **Vật tư:**
+    * Sử dụng thảm lót màu tối.
+    * Các size ly phải có đường kính chênh lệch tối thiểu **0.5cm - 1cm**.
+    * Có dán vật tham chiếu (Calibration mark) trên bàn.
+
+---
+
+## Contribution
+Dự án được phát triển bởi Võ Ngọc Tân. Mọi đóng góp vui lòng tạo Pull Request hoặc Issue.
+
+## 📄 License
+TH Labs.
