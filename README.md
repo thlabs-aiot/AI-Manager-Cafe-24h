@@ -24,7 +24,8 @@ Việc kiểm tra và đối chiếu số liệu bán ra của các sản phẩm
 
 **Tài liệu tham khảo và mẫu ly tham khảo:**
 
-> c[`﻿`﻿lythuytinh.vn/collections/ly-cafe-da-cafe-capuchino](https://lythuytinh.vn/collections/ly-cafe-da-cafe-capuchino) 
+> c[`﻿`﻿lythuytinh.vn/collections/ly-cafe-da-cafe-capuchino](https://lythuytinh.vn/collections/ly-cafe-da-cafe-capuchino)
+> https://lythuytinh.vn/
 
 
 
